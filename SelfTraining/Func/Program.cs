@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Func
 {
@@ -22,16 +23,55 @@ namespace Func
 
             // Thực thi Extension method Square
             Console.WriteLine(5.Square());
+
+
+            // Ở đây hàm GetItem() sẽ trả về lần lượt các giá trị 1 - 8. 
+            // Vòng lặp foreach sẽ lặp qua từng phần tử đó sau đó nó lại tiếp tục get gái trị từ hàm GetItem()
+            foreach (var item in GetItem())
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.ReadKey();
+        }
+
+        [Is("Hàm GetItem sử dụng từ khóa yield return để return từng giá trị một Từ khóa yield break dùng để kết thúc vòng lặp")]
+        private static IEnumerable GetItem()
+        {
+            for (int i = 1; i <= 8; i++)
+            {
+                if (i == 8)
+                {
+                    yield break;
+                }
+
+                yield return i;
+            }
         }
     }
 
+    [Is("Extension method cần được chứa trong static class")]
     static class MyClass
     {
-        // Extension method phương thức mở rộng trong C#.
-        // Phương thức mở rộng tính bình phương của một số kiểu int.
+        [Is(" Extension method phương thức mở rộng trong C# Phương thức mở rộng tính bình phương của một số kiểu int")]
         public static int Square(this int n)
         {
             return n * n;
         }
+
+        [Is("Attribute có sẵn")]
+        [Obsolete("This method is obsolete")]
+        public static int Square1(this int n)
+        {
+            return n * n;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Method) ]
+    public class IsAttribute : Attribute
+    {
+        public IsAttribute(string v) => Description = v;
+
+        public string Description { set; get; }
     }
 }
